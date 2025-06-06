@@ -2,6 +2,9 @@ name: Build & Push
 
 on:
     workflow_dispatch:
+      inputs:
+          dev:
+            type: boolean
 
 env:
     REGISTRY: ghcr.io
@@ -34,5 +37,5 @@ jobs:
                   context: .
                   file: ./Dockerfile
                   push: true
-                  tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+                  tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ fromJSON('["latest", "dev"]')[github.event.inputs.dev == 'true'] }}
                   platforms: linux/amd64,linux/arm64
